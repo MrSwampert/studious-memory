@@ -96,3 +96,42 @@ Para garantizar un funcionamiento eficiente y evitar el desgaste de los componen
 
 Esto significa que existe un margen de **tolerancia** alrededor de la **temperatura objetivo**. El **ventilador** o el **calefactor** solo se activarán cuando la temperatura cruce completamente este margen, evitando así que los equipos se enciendan y apaguen repetidamente por cambios mínimos. Esto resulta en un control más estable y un menor consumo energético.
 
+El sistema está diseñado para ser controlado no solo localmente, sino también a distancia.
+
+**Doble Canal de Comunicación:**
+
+Para lograrlo, se emplean dos puertos serie **UART** independientes. Esta configuración es clave para un funcionamiento robusto:
+
+- Un canal se reserva para la **depuración y programación** del sistema a través de una conexión directa con el PC.
+
+- El segundo canal está dedicado exclusivamente a la conectividad externa, diseñado para interactuar con módulos de expansión, como podría ser un **ESP01 WiFi**.
+
+Esta separación de canales permite que el sistema esté preparado para integrarse con plataformas de IoT o aplicaciones externas. La **arquitectura del firmware** está estructurada para interpretar directivas enviadas a través del puerto de comunicación externo.
+
+Esto sienta las bases para que, en futuras implementaciones, un sistema remoto pueda:
+
+- **Monitorear** el estado completo del dispositivo.
+- **Modificar** parámetros de funcionamiento, como la temperatura objetivo.
+- **Gestionar** las credenciales de acceso de forma segura.
+
+# Arquitectura de Firmware:
+
+Para garantizar un sistema robusto, que responda al instante y nunca se congele, el **firmware** se construyó sobre dos pilares fundamentales que trabajan en perfecta sincronía. Una organización lógica estricta y un motor de ejecución de **alta eficiencia**.
+
+**La Organización: Arquitectura de Máquina de Estados**
+
+A alto nivel, toda la lógica del sistema se organiza como una **Máquina de Estados Finita** (FSM). Esto significa que el programa no es un caos de funciones, sino un organismo que solo puede existir en un estado bien definido a la vez (por ejemplo, BLOQUEADO, INGRESANDO_CLAVE o DESBLOQUEADO).
+
+Cada estado actúa como una **burbuja** con sus **propias reglas**, definiendo qué acciones son posibles y cuáles deben ser ignoradas.
+
+- **Ejemplo Práctico:** En el estado **BLOQUEADO**, el sistema es sordo a cualquier tecla del menú. Su única preocupación es detectar el inicio de un intento de acceso.
+
+- **Ventaja Principal:** Este modelo impone un orden increíble, haciendo que el código sea predecible y seguro. Previene errores lógicos (como intentar abrir un menú mientras la puerta está bloqueada) y facilita enormemente la adición de nuevas funcionalidades sin romper las existentes.
+
+**El Motor: Bucle Principal No Bloqueante**
+
+A bajo nivel, el motor que impulsa esta máquina de estados es un bucle principal no bloqueante (también conocido como Superloop).
+
+A diferencia de un enfoque simple que usaría pausas (HAL_Delay()), nuestro bucle es un ciclo de sondeo ultrarrápido que nunca se detiene a esperar. En cada vuelta, que dura microsegundos, pregunta a cada componente: ¿Hay algo nuevo para mí?. Revisando si se ha presionado una tecla, si ha llegado un comando por el puerto serie o si es momento de medir la temperatura.
+
+- **Ventaja Principal:** El procesador nunca está ocupado esperando. Siempre está disponible y listo para reaccionar de inmediato ante cualquier evento.
