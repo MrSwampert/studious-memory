@@ -56,13 +56,43 @@ El núcleo de la seguridad del sistema es un control de acceso que gestiona la c
 
 - **Acceso Denegado:** Si la clave es incorrecta, la pantalla muestra el mensaje "ACCESO DENEGADO" durante 5 segundos. Simultáneamente, se envía una alerta por el puerto serie y el sistema regresa automáticamente al estado BLOQUEADO.
 
-- **Re-bloqueo del Sistema:** El sistema puede volver al estado BLOQUEADO de dos maneras:
+- **Re-bloqueo del Sistema:** El sistema puede volver al estado BLOQUEADO de dos maneras, manual y automático.
 
-- **Manualmente:** El usuario puede presionar la tecla * en cualquier momento desde el estado desbloqueado.
+ - **Manualmente:** El usuario puede presionar la tecla * en cualquier momento desde el estado desbloqueado.
 
-- **Automáticamente:** Por seguridad, si el sistema detecta 10 segundos de inactividad durante el ingreso de la clave, cancela la operación y se bloquea de nuevo.
+ - **Automáticamente:** Por seguridad, si el sistema detecta 10 segundos de inactividad durante el ingreso de la clave, cancela la operación y se bloquea de nuevo.
 
-Dicho todo esto, esa es la lógica de la contraseña. Ahora, pasando a la navegación.
+Una vez que el acceso es concedido, el sistema cobra vida y presenta su interfaz principal en la pantalla OLED, mostrando en tiempo real la temperatura y humedad de la habitación.
+
+Paralelamente, un LED de estado (conocido como heartbeat) parpadea de forma constante en la placa. Este parpadeo es la señal visual que confirma que el sistema está operando correctamente y no se ha bloqueado.
+
+Desde esta pantalla principal, el usuario puede presionar la tecla '1' para entrar al menú de operaciones, donde puede tomar el control manual del sistema.
 
 **Menú de Navegación:**
+
+Este menú le da al usuario el poder de anular temporalmente el modo automático para ajustar el ambiente a su gusto. Las opciones son:
+
+- Ajustar el Termostato: Permite establecer la temperatura de confort deseada que el sistema usará como referencia.
+
+- Forzar Ventilación: Ofrece la capacidad de encender o apagar el ventilador manualmente, sin importar la temperatura actual.
+
+- Activar Calefactor: De igual manera, permite controlar el calefactor directamente.
+
+**Sistema de Climatización Automático**
+
+El sistema opera como un termostato inteligente cuyo objetivo es mantener una temperatura de confort de manera totalmente autónoma.
+
+El núcleo de esta función se basa en las mediciones precisas obtenidas por una **termocupla**, que constantemente informa la **temperatura ambiente al microcontrolador**. Este valor se compara en tiempo real contra la temperatura objetivo que el usuario ha configurado previamente.
+
+El algoritmo de decisión actúa de la siguiente manera:
+
+- Si la lectura de la **termocupla** cae por debajo del objetivo, el sistema activa el calefactor para elevar la temperatura.
+
+- Si la lectura supera el objetivo, se enciende el ventilador para refrescar el ambiente.
+
+**El proceso es un ciclo constante:** cada dos segundos, el microcontrolador consulta el sensor de temperatura para obtener una lectura precisa del ambiente. Luego, compara esta lectura con la temperatura objetivo fijada por el usuario para decidir si es necesario activar el ventilador (si hace calor) o el calefactor (si hace frío), manteniendo así la habitación siempre confortable.
+
+Para garantizar un funcionamiento eficiente y evitar el desgaste de los componentes, el sistema no reacciona a cada pequeña fluctuación. En su lugar, se implementa un **control por histéresis.**
+
+Esto significa que existe un margen de **tolerancia** alrededor de la **temperatura objetivo**. El **ventilador** o el **calefactor** solo se activarán cuando la temperatura cruce completamente este margen, evitando así que los equipos se enciendan y apaguen repetidamente por cambios mínimos. Esto resulta en un control más estable y un menor consumo energético.
 
