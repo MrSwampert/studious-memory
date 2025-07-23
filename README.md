@@ -132,6 +132,31 @@ Cada estado actúa como una **burbuja** con sus **propias reglas**, definiendo q
 
 A bajo nivel, el motor que impulsa esta máquina de estados es un bucle principal no bloqueante (también conocido como Superloop).
 
-A diferencia de un enfoque simple que usaría pausas (HAL_Delay()), nuestro bucle es un ciclo de sondeo ultrarrápido que nunca se detiene a esperar. En cada vuelta, que dura microsegundos, pregunta a cada componente: ¿Hay algo nuevo para mí?. Revisando si se ha presionado una tecla, si ha llegado un comando por el puerto serie o si es momento de medir la temperatura.
+A diferencia de un enfoque simple que usaría pausas (HAL_Delay()), el bucle implementado es un ciclo de sondeo ultrarrápido que nunca se detiene a esperar. En cada vuelta, que dura microsegundos, pregunta a cada componente: ¿Hay algo nuevo para mí?. Revisando si se ha presionado una tecla, si ha llegado un comando por el puerto serie o si es momento de medir la temperatura.
 
 - **Ventaja Principal:** El procesador nunca está ocupado esperando. Siempre está disponible y listo para reaccionar de inmediato ante cualquier evento.
+
+# Protocolo de Comandos:
+
+
+# Optimización:
+
+Un firmware robusto no solo debe ser funcional, sino también eficiente. El diseño se enfoca en tres áreas clave de optimización para garantizar un rendimiento superior.
+
+**Capacidad de Respuesta Instantánea**
+
+La prioridad es que el sistema reaccione al instante. Esto se logra combinando dos técnicas:
+
+- **Arquitectura No Bloqueante:** El corazón del firmware es un bucle principal que nunca se detiene con pausas (como HAL_Delay()). Este motor de ejecución ultrarrápido asegura que el procesador siempre esté disponible para atender cualquier evento sin demora.
+
+- **Manejo por Interrupciones:** En lugar de que el procesador malgaste recursos preguntando constantemente si se ha pulsado una tecla (polling), se usan interrupciones. El propio hardware (teclado, puerto serie) avisa activamente al procesador cuando ocurre un evento, permitiéndole ahorrar energía y tiempo de cómputo.
+
+**Fluidez en la Interfaz de Usuario**
+
+- Redibujar la pantalla OLED es una operación lenta que puede consumir muchos recursos. Para optimizarla, la actualización de la pantalla es condicional. Se utiliza una "bandera" de software que solo se activa cuando un dato relevante (como la temperatura o el estado del sistema) ha cambiado. De esta forma, la pantalla solo se refresca cuando es estrictamente necesario, lo que resulta en una interfaz fluida, sin parpadeos, y libera al procesador para otras tareas.
+
+**Fiabilidad en las Mediciones Críticas**
+
+- La precisión del termostato depende directamente de la correcta lectura del sensor. La comunicación con la termocupla requiere una transacción de datos que no debe ser interrumpida para garantizar su integridad.
+
+- Para lograrlo, se implementa una sección crítica: justo antes de iniciar la comunicación con el sensor, el firmware deshabilita momentáneamente otras interrupciones (como las del teclado). Inmediatamente después de obtener la lectura, las interrupciones se reactivan. Este breve instante de "concentración" exclusiva asegura que cada medición de temperatura sea precisa y fiable, lo cual es fundamental para el correcto funcionamiento del sistema.
