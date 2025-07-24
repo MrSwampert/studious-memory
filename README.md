@@ -14,7 +14,8 @@ Santiago Galeano Castaño
 
 Diagrama de bloques:
 
-<img width="3433" height="3840" alt="Mermaid Chart - Create complex, visual diagrams with text  A smarter way of creating diagrams -2025-07-23-200716" src="https://github.com/user-attachments/assets/3318207f-a0e4-4fa0-a936-2f5d0a8a129d" />
+<img width="3380" height="3840" alt="Mermaid Chart - Create complex, visual diagrams with text  A smarter way of creating diagrams -2025-07-24-015713" src="https://github.com/user-attachments/assets/2d12c53d-6074-4555-8c93-d8d341c8660b" />
+
 
 
 **Las entradas:**
