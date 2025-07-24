@@ -54,7 +54,7 @@ El núcleo de la seguridad del sistema es un control de acceso que gestiona la c
 
 - **Estado Inicial (BLOQUEADO):** Por defecto, el sistema se encuentra inactivo y seguro. La pantalla OLED muestra el mensaje "SISTEMA BLOQUEADO" y espera la interacción del usuario.
 
-- **Ingreso de Clave:** Al presionar la primera tecla, el sistema transita al estado de ingreso de clave. La pantalla solicita la contraseña y muestra un asterisco (*) por cada uno de los 4 dígitos introducidos para mantener la privacidad.
+- **Ingreso de Clave:** Al presionar la primera tecla, el sistema transita al estado de ingreso de clave. La pantalla solicita la contraseña y muestra un asterisco (*) por cada uno de los 4 dígitos introducidos para mantener la privacidad. La clave por defecto es **1234**.
 
 - **Validación:** Una vez que se ingresan los cuatro dígitos, el sistema los compara con la contraseña almacenada.
 
