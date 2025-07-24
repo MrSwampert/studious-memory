@@ -17,6 +17,11 @@ Diagrama de bloques:
 <img width="3380" height="3840" alt="Mermaid Chart - Create complex, visual diagrams with text  A smarter way of creating diagrams -2025-07-24-015713" src="https://github.com/user-attachments/assets/2d12c53d-6074-4555-8c93-d8d341c8660b" />
 
 
+Transformacion de los pines del sensor al STM32
+
+<img width="661" height="188" alt="image(5)" src="https://github.com/user-attachments/assets/f702a984-1a09-447c-8fab-b0898413eccf" />
+
+
 
 **Las entradas:**
 
