@@ -72,8 +72,6 @@ Una vez que el acceso es concedido, el sistema cobra vida y presenta su interfaz
 
 Paralelamente, un LED de estado (conocido como heartbeat) parpadea de forma constante en la placa. Este parpadeo es la señal visual que confirma que el sistema está operando correctamente y no se ha bloqueado.
 
-Desde esta pantalla principal, el usuario puede presionar la tecla '1' para entrar al menú de operaciones, donde puede tomar el control manual del sistema.
-
 **Menú de Navegación:**
 
 Este menú le da al usuario el poder de anular temporalmente el modo automático para ajustar el ambiente a su gusto. Las opciones son:
@@ -98,7 +96,7 @@ El algoritmo de decisión actúa de la siguiente manera:
 
 **El proceso es un ciclo constante:** cada dos segundos, el microcontrolador consulta el sensor de temperatura para obtener una lectura precisa del ambiente. Luego, compara esta lectura con la temperatura objetivo fijada por el usuario para decidir si es necesario activar el ventilador (si hace calor) o el calefactor (si hace frío), manteniendo así la habitación siempre confortable.
 
-Para garantizar un funcionamiento eficiente y evitar el desgaste de los componentes, el sistema no reacciona a cada pequeña fluctuación. En su lugar, se implementa un **control por histéresis.**
+Para garantizar un funcionamiento eficiente y evitar el desgaste de los componentes, el sistema no reacciona a cada pequeña fluctuación.
 
 Esto significa que existe un margen de **tolerancia** alrededor de la **temperatura objetivo**. El **ventilador** o el **calefactor** solo se activarán cuando la temperatura cruce completamente este margen, evitando así que los equipos se enciendan y apaguen repetidamente por cambios mínimos. Esto resulta en un control más estable y un menor consumo energético.
 
@@ -144,6 +142,15 @@ A diferencia de un enfoque simple que usaría pausas (HAL_Delay()), el bucle imp
 
 # Protocolo de Comandos:
 
+A - 100% del PWM
+
+B - 75% del PWM
+
+C - 30% del PWM
+
+D - 0% del PWM
+
+A la hora de poner la clave normal, si se le ingresa la clave 2112, lo redirige al cambio de contraseña 
 
 # Optimización:
 
