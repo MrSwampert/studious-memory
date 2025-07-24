@@ -2,7 +2,7 @@
 
 El diseño y la implementación de un sistema integrado completo para la gestión inteligente de una habitación, conforman este proyecto. El sistema, gestionado por un microcontrolador STM32, integra una interfaz de usuario clara a través de una pantalla OLED, un sistema automatizado de gestión climática que mantiene una temperatura ambiente y un control de acceso seguro mediante un teclado numérico.
 
-El MCU STM32 es el microcontrolador principal. Es el encargado de ejecutar el firmware para que lea los sensores, procesar la lógica, y activar las salidas.El chip corre una máquina de estados y un super loop para ser rápido y eficiente, asegurando que nunca se quede colgado.
+El MCU STM32 es el microcontrolador principal. Es el encargado de ejecutar el firmware para que lea los sensores, procesar la lógica, y activar las salidas. El chip corre una máquina de estados y un super loop para ser rápido y eficiente, asegurando que nunca se quede colgado.
 
 # Integrantes:
 
@@ -21,14 +21,14 @@ Diagrama de bloques:
 
 - **El Teclado Matricial 4x4** Es la principal forma de interacción local del usuario. Permite introducir la **contraseña de 4 dígitos** para desbloquear el sistema y navegar por los menús para configurar la climatización.
 
-- El **Sensor de Temperatura y Humedad**, **se usa una termocupla**. Este sensor es crucial para la función de la climatización. En este caso, el MCU lo lee cada dos segundos para saber la temperatura y humedad del ambiente y así decidir si debe encender el ventilador (por el calor) o el calefactor (por el frío). 
+- El **Sensor de Temperatura**, **se usa un sensor BMP280**. Este sensor es crucial para la función de la climatización. En este caso, el MCU lo lee cada dos segundos para saber la temperatura del ambiente y así decidir si debe encender el ventilador (por el calor) o el calefactor (por el frío). 
 
 Estos son los dispositivos que le envían información al STM32 para que tome decisiones.
 
 
 **Las salidas:**
 
-- La **pantalla OLED 0.96** es la interfaz visual principal. Muestra los mensajes como el Sistema Bloqueado, solicitar la clave y presenta el menú de opciones junto con los datos de temperatura y humedad. 
+- La **pantalla OLED 0.96** es la interfaz visual principal. Muestra los mensajes como el Sistema Bloqueado, solicitar la clave y presenta el menú de opciones junto con los datos de temperatura.
 
 - El **ventilador** forma parte del sistema de climatización. Se lelga a activar automáticamente cuando la temperatura supera el objetivo establecido. El control de este se realiza por PWM.
 
@@ -36,7 +36,7 @@ Estos son los dispositivos que le envían información al STM32 para que tome de
 
 - El **LED de puerta abierta** sirve como un indicador visual del estado de la puerta o del sistema
 
-- Finalmente el **LED de estado**, es el que parpadea constantemente. La única funcion, es confrmar visualmente que el sistema esta en cendido y esta corriendo sin fallos, lo que es conocido como heatbeat.
+- Finalmente el **LED de estado**, es el que parpadea constantemente. La única función, es confrmar visualmente que el sistema esta en cendido y esta corriendo sin fallos, lo que es conocido como heatbeat.
 
 Estos son los dispositivos que el STM32 controla para interactuar con el mundo físico y el usuario.
 
@@ -82,11 +82,11 @@ Este menú le da al usuario el poder de anular temporalmente el modo automático
 
 El sistema opera como un termostato inteligente cuyo objetivo es mantener una temperatura de confort de manera totalmente autónoma.
 
-El núcleo de esta función se basa en las mediciones precisas obtenidas por una **termocupla**, que constantemente informa la **temperatura ambiente al microcontrolador**. Este valor se compara en tiempo real contra la temperatura objetivo que el usuario ha configurado previamente.
+El núcleo de esta función se basa en las mediciones precisas obtenidas por el **sensor**, que constantemente informa la **temperatura ambiente al microcontrolador**. Este valor se compara en tiempo real contra la temperatura objetivo que el usuario ha configurado previamente.
 
 El algoritmo de decisión actúa de la siguiente manera:
 
-- Si la lectura de la **termocupla** cae por debajo del objetivo, el sistema activa el calefactor para elevar la temperatura.
+- Si la lectura del **sensor** cae por debajo del objetivo, el sistema activa el calefactor para elevar la temperatura.
 
 - Si la lectura supera el objetivo, se enciende el ventilador para refrescar el ambiente.
 
@@ -153,7 +153,7 @@ La prioridad es que el sistema reaccione al instante. Esto se logra combinando d
 
 **Fluidez en la Interfaz de Usuario**
 
-- Redibujar la pantalla OLED es una operación lenta que puede consumir muchos recursos. Para optimizarla, la actualización de la pantalla es condicional. Se utiliza una "bandera" de software que solo se activa cuando un dato relevante (como la temperatura o el estado del sistema) ha cambiado. De esta forma, la pantalla solo se refresca cuando es estrictamente necesario, lo que resulta en una interfaz fluida, sin parpadeos, y libera al procesador para otras tareas.
+- Redibujar la pantalla OLED es una operación lenta que puede consumir muchos recursos. Para optimizarla, la actualización de la pantalla es condicional. Se utiliza una bandera de software que solo se activa cuando un dato relevante (como la temperatura o el estado del sistema) ha cambiado. De esta forma, la pantalla solo se refresca cuando es estrictamente necesario, lo que resulta en una interfaz fluida, sin parpadeos, y libera al procesador para otras tareas.
 
 **Fiabilidad en las Mediciones Críticas**
 
