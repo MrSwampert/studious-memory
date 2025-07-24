@@ -58,7 +58,7 @@ El núcleo de la seguridad del sistema es un control de acceso que gestiona la c
 
 - **Validación:** Una vez que se ingresan los cuatro dígitos, el sistema los compara con la contraseña almacenada.
 
-- **Acceso Concedido:** Si la clave es correcta, el sistema pasa al estado DESBLOQUEADO. La cerradura electrónica se abre, y la pantalla muestra un mensaje de confirmación antes de dar acceso a las funciones de climatización y a los menús de navegación.
+- **Acceso Concedido:** Si la clave es correcta, el sistema pasa al estado DESBLOQUEADO. La pantalla muestra un mensaje de confirmación antes de dar acceso a las funciones de climatización y a los menús de navegación.
 
 - **Acceso Denegado:** Si la clave es incorrecta, la pantalla muestra el mensaje "ACCESO DENEGADO" durante 5 segundos. Simultáneamente, se envía una alerta por el puerto serie y el sistema regresa automáticamente al estado BLOQUEADO.
 
@@ -134,7 +134,7 @@ Cada estado actúa como una **burbuja** con sus **propias reglas**, definiendo q
 
 **El Motor: Bucle Principal No Bloqueante**
 
-A bajo nivel, el motor que impulsa esta máquina de estados es un bucle principal no bloqueante (también conocido como Superloop).
+A bajo nivel, el motor que impulsa esta máquina de estados es un bucle principal no bloqueante.
 
 A diferencia de un enfoque simple que usaría pausas (HAL_Delay()), el bucle implementado es un ciclo de sondeo ultrarrápido que nunca se detiene a esperar. En cada vuelta, que dura microsegundos, pregunta a cada componente: ¿Hay algo nuevo para mí?. Revisando si se ha presionado una tecla, si ha llegado un comando por el puerto serie o si es momento de medir la temperatura.
 
@@ -150,7 +150,7 @@ C - 30% del PWM
 
 D - 0% del PWM
 
-A la hora de poner la clave normal, si se le ingresa la clave 2112, lo redirige al cambio de contraseña 
+A la hora de poner la clave normal, si se le ingresa la clave **2112**, lo redirige al cambio de contraseña 
 
 # Optimización:
 
@@ -170,6 +170,6 @@ La prioridad es que el sistema reaccione al instante. Esto se logra combinando d
 
 **Fiabilidad en las Mediciones Críticas**
 
-- La precisión del termostato depende directamente de la correcta lectura del sensor. La comunicación con la termocupla requiere una transacción de datos que no debe ser interrumpida para garantizar su integridad.
+- La precisión del termostato depende directamente de la correcta lectura del sensor. La comunicación con el sensor BMP280 requiere una transacción de datos que no debe ser interrumpida para garantizar su integridad.
 
-- Para lograrlo, se implementa una sección crítica: justo antes de iniciar la comunicación con el sensor, el firmware deshabilita momentáneamente otras interrupciones (como las del teclado). Inmediatamente después de obtener la lectura, las interrupciones se reactivan. Este breve instante de "concentración" exclusiva asegura que cada medición de temperatura sea precisa y fiable, lo cual es fundamental para el correcto funcionamiento del sistema.
+- Para lograrlo, se implementa una sección crítica: justo antes de iniciar la comunicación con el sensor, el firmware deshabilita momentáneamente otras interrupciones (como las del teclado). Inmediatamente después de obtener la lectura, las interrupciones se reactivan. Este breve instante de concentración exclusiva asegura que cada medición de temperatura sea precisa y fiable, lo cual es fundamental para el correcto funcionamiento del sistema.
